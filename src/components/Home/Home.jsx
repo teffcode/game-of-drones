@@ -32,7 +32,7 @@ export const Button = styled.button`
   outline: none;
   text-align: center;
   text-transform: uppercase;
-  width: 120px;
+  width: 100px;
 `
 
 export const PrincipalTitle = styled.h1`
@@ -40,6 +40,10 @@ export const PrincipalTitle = styled.h1`
   font-size: 35px;
   margin: 0;
   text-align: center;
+  // iPhone5/SE
+  @media (max-width: 320px) {
+    font-size: 25px;
+  }
 `
 
 export const SecondaryTitle = styled.h2`

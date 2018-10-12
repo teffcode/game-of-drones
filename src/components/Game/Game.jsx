@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
+import ReactModal from 'react-modal';
 import { withRouter } from 'react-router-dom';
 
 import { PrincipalTitle, Button } from '../Home/Home';
@@ -17,7 +18,7 @@ const RoundTitle = styled.nav`
   background-color: white;
   color: black;
   display: flex;
-  height: 50px;
+  height: 80px;
   justify-content: space-evenly;
   margin: auto;
   position: absolute;
@@ -25,6 +26,7 @@ const RoundTitle = styled.nav`
   z-index: 2;
   // iPad Pro
   @media (max-width: 1024px) {
+    height: 50px;
     top: 47vh;
   }
 `
@@ -107,10 +109,44 @@ const SelectStyled = styled(Select) `
   }
 `
 
+const ReactModalStyled = styled(ReactModal)`
+  background: white;
+  border-radius: 20px;
+  bottom: 0;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 70%;
+  justify-content: center;
+  left: 0;
+  margin: auto;
+  outline: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 70%;
+  z-index: 3;
+  button {
+    margin-top: 30px;
+  }
+`
+
 class Game extends Component {
+
+  state = {
+    show: false
+  }
 
   handleSubmit = () => {
     this.props.history.push('/statistics')
+  }
+
+  handleOpenModal = () => {
+    this.setState({ showModal: true });
+  }
+  
+  handleCloseModal = () => {
+    this.setState({ showModal: false });
   }
 
   render() {
@@ -122,8 +158,21 @@ class Game extends Component {
 
     return (
       <GameContainer>
+        <ReactModalStyled 
+           isOpen={this.state.showModal}
+           contentLabel="Minimal Modal Example"
+           style={{
+            overlay: {
+              backgroundColor: 'transparent'
+            }
+          }}
+        >
+          <PrincipalTitle black>Player X <br/> WIN</PrincipalTitle>
+          <Button pink onClick={this.handleCloseModal}>OK</Button>
+        </ReactModalStyled>
         <RoundTitle>
           <PrincipalTitle black>Round</PrincipalTitle>
+          <Button onClick={this.handleOpenModal}>Play</Button>
           <Button onClick={this.handleSubmit}>Score</Button>
         </RoundTitle>
         <PlayerOneContent>
