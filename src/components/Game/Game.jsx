@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Select from 'react-select'
+import Select from 'react-select';
+import { withRouter } from 'react-router-dom';
 
 import { PrincipalTitle, Button } from '../Home/Home';
 
@@ -11,7 +12,7 @@ const GameContainer = styled.div`
   width: 100vw;
 `
 
-const RoundTitle = styled.div`
+const RoundTitle = styled.nav`
   align-items: center;
   background-color: white;
   color: black;
@@ -107,6 +108,11 @@ const SelectStyled = styled(Select) `
 `
 
 class Game extends Component {
+
+  handleSubmit = () => {
+    this.props.history.push('/statistics')
+  }
+
   render() {
     const options = [
       { value: 'rock', label: 'Rock' },
@@ -118,7 +124,7 @@ class Game extends Component {
       <GameContainer>
         <RoundTitle>
           <PrincipalTitle black>Round</PrincipalTitle>
-          <Button>Score</Button>
+          <Button onClick={this.handleSubmit}>Score</Button>
         </RoundTitle>
         <PlayerOneContent>
           <StarsContent>
@@ -143,4 +149,4 @@ class Game extends Component {
   }
 }
 
-export default Game;
+export default withRouter(Game);
