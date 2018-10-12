@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import Select from 'react-select'
 
 import { PrincipalTitle, Button } from '../Home/Home';
 
 const GameContainer = styled.div`
   height: 100vh;
+  overflow: hidden;
   position: relative;
   width: 100vw;
 `
 
-const RoundContainer = styled.div`
+const RoundTitle = styled.div`
   align-items: center;
   background-color: white;
-  border-radius: 0px 0px 40px 40px;
   color: black;
   display: flex;
-  flex-direction: column;
-  height: 130px;
-  justify-content: space-around;
-  left: 0;
+  height: 50px;
+  justify-content: space-evenly;
   margin: auto;
-  padding: 15px 0px;
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 500px;
+  width: 100vw;
   z-index: 2;
+  // iPad Pro
+  @media (max-width: 1024px) {
+    top: 47vh;
+  }
 `
 
 const PlayerOneContent = styled.div`
@@ -36,9 +36,14 @@ const PlayerOneContent = styled.div`
   height: 100vh;
   justify-content: center;
   left: 0;
-  padding: 0px 15px;
   position: absolute;
   width: 50vw;
+  // iPad Pro
+  @media (max-width: 1024px) {
+    bottom: 0;
+    height: 50vh;
+    width: 100vw;
+  }
 `
 
 const PlayerTwoContent = styled.div`
@@ -48,10 +53,17 @@ const PlayerTwoContent = styled.div`
   flex-direction: column;  
   height: 100vh;
   justify-content: center;
-  padding: 0px 15px;
   position: absolute;
   right: 0;
   width: 50vw;
+  // iPad Pro
+  @media (max-width: 1024px) {
+    height: 50vh;
+    top: 0;
+    transform: rotate(180deg);
+    font-size: 10px;
+    width: 100vw;
+  }
 `
 
 const StarsContent = styled.div `
@@ -61,54 +73,70 @@ const StarsContent = styled.div `
     color: yellow;
     font-size: 40px;
     margin: 0px 5px;
+    // iPhone 6/7/8 Plus
+    @media (max-width: 414px) {
+      font-size: 25px;
+    }
+  }
+  // iPhone 6/7/8 Plus
+  @media (max-width: 414px) {
+    margin-bottom: 15px;
+    margin-top: -50px;
   }
 `
 
-const Select = styled.select `
-  display: flex;
-  font-family: 'Fredoka One', cursive;
+const SelectStyled = styled(Select) `
+  cursor: pointer;
   font-size: 20px;
-  height: 50px;
-  margin: 40px 0px;
+  margin-top: 40px;
   outline: none;
-  width: 150px;
+  width: 160px;
+  // iPhone 6/7/8 Plus
+  @media (max-width: 414px) {
+    font-size: 15px;
+    margin-top: 10px;
+  }
+  // Galaxy S5
+  @media (max-width: 360px) {
+    font-size: 12px;
+  }
+  // iPhone5/SE
+  @media (max-width: 320px) {
+    font-size: 10px;
+  }
 `
 
 class Game extends Component {
   render() {
+    const options = [
+      { value: 'rock', label: 'Rock' },
+      { value: 'paper', label: 'Paper' },
+      { value: 'scissor', label: 'Scissor' }
+    ]
+
     return (
       <GameContainer>
-        <RoundContainer>
+        <RoundTitle>
           <PrincipalTitle black>Round</PrincipalTitle>
           <Button>Score</Button>
-        </RoundContainer>
+        </RoundTitle>
         <PlayerOneContent>
           <StarsContent>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
+            <i className="fas fa-star"></i>
+            <i className="fas fa-star"></i>
+            <i className="fas fa-star"></i>
           </StarsContent>
           <PrincipalTitle>Name</PrincipalTitle>
-          <Select>
-            <option value="0">Select: </option>
-            <option value="1">Rock</option>
-            <option value="2">Paper</option>
-            <option value="3">Scissor</option>
-          </Select>
+          <SelectStyled options={options}></SelectStyled>
         </PlayerOneContent>
         <PlayerTwoContent>
           <StarsContent>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
+            <i className="fas fa-star"></i>
+            <i className="fas fa-star"></i>
+            <i className="fas fa-star"></i>
           </StarsContent>
           <PrincipalTitle>Name</PrincipalTitle>
-          <Select>
-            <option value="0">Select: </option>
-            <option value="1">Rock</option>
-            <option value="2">Paper</option>
-            <option value="3">Scissor</option>
-          </Select>
+          <SelectStyled options={options}></SelectStyled>
         </PlayerTwoContent>
       </GameContainer>
     );
