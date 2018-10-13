@@ -57,6 +57,15 @@ export const PrincipalTitle = styled.h1`
 const InputContainer = styled.div`
   color: white;
   margin: 30px 0px;
+  form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  button {
+    margin-top: 30px;
+  }
 `;
 
 const Label = styled.label`
@@ -150,7 +159,7 @@ class Home extends Component {
       })
     );
   }
-  
+
   handleSubmit = (e) => {
     const { player1, player2 } = this.state;
 
