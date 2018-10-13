@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { fetchStatistics } from '../../actions';
 
 import { PrincipalTitle, Button } from '../Home/Home';
 
@@ -59,17 +60,38 @@ const PrincipalTitleStyled = styled(PrincipalTitle)`
 `
 
 class Statistics extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      statistics: []
+    }
+  }
 
-  handleSubmit = () => {
+  componentDidMount() {
+    this.props.fetchStatistics()
+      .then(response => {
+        this.setState((prevState) => {
+          return {
+            ...prevState,
+            statistics: [...response.payload.data],
+          }
+        });
+      });
+  }
+
+  goToGame = () => {
     this.props.history.push('/game')
   }
 
   render() {
+    const { statistics } = this.state;
+
+    // TODO print the appripiate statistics
     return (
       <StatisticsContainer>
         <ScoreTitle>
           <PrincipalTitle blue>Score</PrincipalTitle>
-          <Button onClick={this.handleSubmit}>Back</Button>
+          <Button onClick={this.goToGame}>Back</Button>
         </ScoreTitle>
         <PrincipalTitleStyled blue>
           <span role="img" aria-label="hand">👇🏼 </span>
@@ -114,4 +136,4 @@ class Statistics extends Component {
   }
 }
 
-export default withRouter(Statistics);
+export default connect(null, { fetchStatistics })(Statistics);

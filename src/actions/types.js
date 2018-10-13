@@ -1,0 +1,2 @@
+export const FETCH_STATISTICS = 'FETCH_STATISTICS'; 
+export const SET_PLAYERS = 'SET_PLAYERS';

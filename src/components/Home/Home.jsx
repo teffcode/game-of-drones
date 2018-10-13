@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setPlayers } from '../../actions';
 
 const HomeContainer = styled.div`
   align-items: center;
@@ -126,9 +127,12 @@ const Animation = styled.div `
 `
 
 class Home extends Component {
-
-  goToGame = () => {
-    this.props.history.push('/game')
+  constructor(props) {
+    super(props);
+    this.state = {
+      player1: '',
+      player2: '',
+    }
   }
 
   renderAnimation = () => {
@@ -145,29 +149,59 @@ class Home extends Component {
         );
       })
     );
-  }  
+  }
+  
+  handleSubmit = (e) => {
+    const { player1, player2 } = this.state;
+
+    e.preventDefault();
+    this.props.setPlayers(player1, player2);
+    this.props.history.push('/game');
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      ...this.state,
+      [e.target.name]: e.target.value,
+    })
+  }
 
   render() {
+    const { player1, player2 } = this.state;
     return (
       <HomeContainer>
         <Animation>{ this.renderAnimation() }</Animation>
         <HomeText>
           <PrincipalTitle>Game of Drones</PrincipalTitle>
           <InputContainer>
-            <div>
-              <Label>Player 1 <span role="img" aria-label="hand">👉🏼 </span></Label>
-              <Input type="text" name="name" placeholder="Player 1 name"></Input>
-            </div>
-            <div>
-              <Label>Player 2 <span role="img" aria-label="hand">👉🏾</span></Label>
-              <Input type="text" name="name" placeholder="Player 2 name"></Input>
-            </div>
+            <form onSubmit={this.handleSubmit}>
+              <div>
+                <Label>Player 1 <span role="img" aria-label="hand">👉🏼 </span></Label>
+                <Input
+                  type="text"
+                  name="player1"
+                  placeholder="Player 1 name"
+                  value={player1}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div>
+                <Label>Player 2 <span role="img" aria-label="hand">👉🏾</span></Label>
+                <Input
+                  type="text"
+                  name="player2"
+                  placeholder="Player 2 name"
+                  value={player2}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <Button type="submit">Start</Button>
+            </form>
           </InputContainer>
-          <Button onClick={this.goToGame}>Start</Button>
         </HomeText>
       </HomeContainer>
     );
   }
 }
 
-export default withRouter(Home);
+export default connect(null, { setPlayers })(Home);
