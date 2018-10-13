@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { withRouter } from 'react-router-dom';
 
 const HomeContainer = styled.div`
   align-items: center;
@@ -20,10 +21,10 @@ const HomeText = styled.div`
 `
 
 export const Button = styled.button`
-  background-color: ${({pink}) => (pink ? '#F7CBF4' : '#85D3F0')};
-  border: 4px solid ${({pink}) => (pink ? '#F061E7' : '#25BAF0')};
-  border-radius: 20px;
-  color: white;
+  background-color: transparent;
+  border: 4px solid ${({pink}) => (pink ? '#EE3DA5' : '#4927F1')};
+  border-radius: 5px;
+  color: ${({pink}) => (pink ? '#EE3DA5' : '#4927F1')};
   cursor: pointer;
   font-family: 'Fredoka One', cursive;
   font-size: 18px;
@@ -33,27 +34,27 @@ export const Button = styled.button`
   text-align: center;
   text-transform: uppercase;
   width: 100px;
+  // iPhone 6/7/8 Plus
+  @media (max-width: 414px) {
+    font-size: 15px;
+    height: 30px;
+    width: 85px;
+  }
 `
 
 export const PrincipalTitle = styled.h1`
-  color: ${({black}) => (black ? '#333' : 'white')};
+  color: ${({blue}) => (blue ? '#4927F1' : 'white')};
   font-size: 35px;
   margin: 0;
   text-align: center;
-  // iPhone5/SE
-  @media (max-width: 320px) {
+  // iPhone 6/7/8 Plus
+  @media (max-width: 414px) {
     font-size: 25px;
   }
 `
 
-export const SecondaryTitle = styled.h2`
-  color: white;
-  letter-spacing: 1px;
-  margin: 8px 0px;
-  text-align: center;
-`
-
 const InputContainer = styled.div`
+  color: white;
   margin: 30px 0px;
 `;
 
@@ -66,8 +67,10 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-  border: none;
-  border-radius: 20px;
+  background-color: transparent;  
+  border: 4px solid white;
+  border-radius: 5px;
+  color: #4927f1;
   font-family: 'Fredoka One', cursive;
   font-size: 18px;
   margin: 8px 0px;
@@ -78,45 +81,44 @@ const Input = styled.input`
   }
 `;
 
+const move = keyframes`
+  from {
+    bottom: 0;
+    position: absolute;
+  }
+  to {
+    bottom: 110%;
+    position: absolute;
+  }
+`
+
+const points = keyframes`
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: right;
+  }
+`
+
 const Ball = styled.div `
-  animation-name: points, move;
+  animation-name: ${points}, ${move};
   animation-duration: .8s, 5s;
   animation-fill-mode: forwards;
   animation-timing-function: steps(28), linear;
   animation-iteration-count: infinite, 1;
 
-  background-color: yellow;
+  background-color: #4927F1;
   border-radius: 50%;
   bottom: -100px;
-  box-shadow: 0 5px 10px black, 0 3px 3px black;
   display: inline-block;
   height: 30px;
   position: fixed;
   width: 30px;
-
-  @keyframes move {
-    from {
-      bottom: 0;
-      position: absolute;
-    }
-    to {
-      bottom: 110%;
-      position: absolute;
-    }
-  }
-  
-  @keyframes points {
-    0% {
-      background-position: 0 0;
-    }
-    100% {
-      background-position: right;
-    }
-  }
 `
 
 const Animation = styled.div `
-  background-color: pink;
+  background-image: linear-gradient(to bottom left, #EE3DA5, #FEC76D);
   height: 100%;
   position: absolute;
   overflow: hidden;
@@ -124,6 +126,10 @@ const Animation = styled.div `
 `
 
 class Home extends Component {
+
+  goToGame = () => {
+    this.props.history.push('/game')
+  }
 
   renderAnimation = () => {
     const balls = new Array(200).fill({})
@@ -148,21 +154,20 @@ class Home extends Component {
         <HomeText>
           <PrincipalTitle>Game of Drones</PrincipalTitle>
           <InputContainer>
-            <SecondaryTitle>Enter Player's Names</SecondaryTitle>
             <div>
-              <Label>Player 1 <span role="img" aria-label="hand">👉🏼</span></Label>
+              <Label>Player 1 <span role="img" aria-label="hand">👉🏼 </span></Label>
               <Input type="text" name="name" placeholder="Player 1 name"></Input>
             </div>
             <div>
-              <Label>Player 2 <span role="img" aria-label="hand">👉🏼</span></Label>
+              <Label>Player 2 <span role="img" aria-label="hand">👉🏾</span></Label>
               <Input type="text" name="name" placeholder="Player 2 name"></Input>
             </div>
           </InputContainer>
-          <Button>Start</Button>
+          <Button onClick={this.goToGame}>Start</Button>
         </HomeText>
       </HomeContainer>
     );
   }
 }
 
-export default Home;
+export default withRouter(Home);

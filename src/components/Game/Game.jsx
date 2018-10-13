@@ -13,7 +13,7 @@ const GameContainer = styled.div`
   width: 100vw;
 `
 
-const RoundTitle = styled.nav`
+export const RoundTitle = styled.nav`
   align-items: center;
   background-color: white;
   color: black;
@@ -27,13 +27,34 @@ const RoundTitle = styled.nav`
   // iPad Pro
   @media (max-width: 1024px) {
     height: 50px;
-    top: 47vh;
+    bottom: 0;
+  }
+  // iPhone 6/7/8 Plus
+  @media (max-width: 414px) {
+    height: 40px;
+  }
+`
+
+const RoundTitleTwo = styled(RoundTitle)`
+  display: none;
+  // iPad Pro
+  @media (max-width: 1024px) {
+    bottom: 100%;
+    display: flex;
+    height: 50px;
+    top: 50px;
+    transform: rotate(180deg);
+  }
+  // iPhone 6/7/8 Plus
+  @media (max-width: 414px) {
+    height: 40px;
+    top: 40px;
   }
 `
 
 const PlayerOneContent = styled.div`
   align-items: center;
-  background-color: #E74667;
+  background-image: linear-gradient(to bottom left, #4927f1, #FDCDD1);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -44,14 +65,15 @@ const PlayerOneContent = styled.div`
   // iPad Pro
   @media (max-width: 1024px) {
     bottom: 0;
-    height: 50vh;
+    height: calc(50vh - 80px);
+    padding-bottom: 80px;
     width: 100vw;
   }
 `
 
 const PlayerTwoContent = styled.div`
   align-items: center;
-  background-color: #5B3ED7;
+  background-image: linear-gradient(to bottom left, #35EDAA, #4927F1);
   display: flex;
   flex-direction: column;  
   height: 100vh;
@@ -61,7 +83,8 @@ const PlayerTwoContent = styled.div`
   width: 50vw;
   // iPad Pro
   @media (max-width: 1024px) {
-    height: 50vh;
+    height: calc(50vh - 80px);
+    padding-bottom: 80px;
     top: 0;
     transform: rotate(180deg);
     font-size: 10px;
@@ -129,27 +152,61 @@ const ReactModalStyled = styled(ReactModal)`
   button {
     margin-top: 30px;
   }
+  @media (max-width: 1024px) {
+    height: 40%;
+    left: -15px;
+    transform: rotate(-90deg);
+    width: 110%;
+  }
 `
-
 class Game extends Component {
 
   state = {
-    show: false
+    show: false,
+    selectedOptionPlayer1: null,
+    selectedOptionPlayer2: null,
+    titleModal: 'Hi'
   }
 
-  handleSubmit = () => {
+  goToStatistics = () => {
     this.props.history.push('/statistics')
   }
 
   handleOpenModal = () => {
+    const { selectedOptionPlayer1, selectedOptionPlayer2 } = this.state;
     this.setState({ showModal: true });
+
+    if(selectedOptionPlayer1.value === selectedOptionPlayer2.value) {
+      this.setState({ titleModal: 'There is a tie 🙄' });
+    } else if(selectedOptionPlayer1.value === 'rock' && selectedOptionPlayer2.value === 'paper') {
+      this.setState({ titleModal: 'Player 2 wins this battle 🎉' });
+    } else if(selectedOptionPlayer1.value === 'rock' && selectedOptionPlayer2.value === 'scissor') {
+      this.setState({ titleModal: 'Player 1 wins this battle 🎉' });
+    } else if(selectedOptionPlayer1.value === 'paper' && selectedOptionPlayer2.value === 'rock') {
+      this.setState({ titleModal: 'Player 1 wins this battle 🎉' });
+    } else if(selectedOptionPlayer1.value === 'paper' && selectedOptionPlayer2.value === 'scissor') {
+      this.setState({ titleModal: 'Player 2 wins this battle 🎉' });
+    } else if(selectedOptionPlayer1.value === 'scissor' && selectedOptionPlayer2.value === 'rock') {
+      this.setState({ titleModal: 'Player 2 wins this battle 🎉' });
+    } else if(selectedOptionPlayer1.value === 'scissor' && selectedOptionPlayer2.value === 'paper') {
+      this.setState({ titleModal: 'Player 1 wins this battle 🎉' });
+    }
   }
   
   handleCloseModal = () => {
     this.setState({ showModal: false });
   }
 
+  handleChangeOptionPlayer1 = (selectedOptionPlayer1) => {
+    this.setState({ selectedOptionPlayer1 });
+  }
+
+  handleChangeOptionPlayer2 = (selectedOptionPlayer2) => {
+    this.setState({ selectedOptionPlayer2 });
+  }
+
   render() {
+    const { titleModal } = this.state;
     const options = [
       { value: 'rock', label: 'Rock' },
       { value: 'paper', label: 'Paper' },
@@ -157,24 +214,29 @@ class Game extends Component {
     ]
 
     return (
-      <GameContainer>
+      <GameContainer id="main">
         <ReactModalStyled 
-           isOpen={this.state.showModal}
-           contentLabel="Minimal Modal Example"
-           style={{
+          isOpen={this.state.showModal}
+          contentLabel="Minimal Modal Example"
+          style={{
             overlay: {
               backgroundColor: 'transparent'
             }
           }}
         >
-          <PrincipalTitle black>Player X <br/> WIN</PrincipalTitle>
+          <PrincipalTitle blue>{titleModal}</PrincipalTitle>
           <Button pink onClick={this.handleCloseModal}>OK</Button>
         </ReactModalStyled>
         <RoundTitle>
-          <PrincipalTitle black>Round</PrincipalTitle>
+          <PrincipalTitle blue>Round</PrincipalTitle>
           <Button onClick={this.handleOpenModal}>Play</Button>
-          <Button onClick={this.handleSubmit}>Score</Button>
+          <Button onClick={this.goToStatistics}>Score</Button>
         </RoundTitle>
+        <RoundTitleTwo>
+          <PrincipalTitle blue>Round</PrincipalTitle>
+          <Button onClick={this.handleOpenModal}>Play</Button>
+          <Button onClick={this.goToStatistics}>Score</Button>
+        </RoundTitleTwo>
         <PlayerOneContent>
           <StarsContent>
             <i className="fas fa-star"></i>
@@ -182,7 +244,7 @@ class Game extends Component {
             <i className="fas fa-star"></i>
           </StarsContent>
           <PrincipalTitle>Name</PrincipalTitle>
-          <SelectStyled options={options}></SelectStyled>
+          <SelectStyled options={options} onChange={this.handleChangeOptionPlayer1}></SelectStyled>
         </PlayerOneContent>
         <PlayerTwoContent>
           <StarsContent>
@@ -191,7 +253,7 @@ class Game extends Component {
             <i className="fas fa-star"></i>
           </StarsContent>
           <PrincipalTitle>Name</PrincipalTitle>
-          <SelectStyled options={options}></SelectStyled>
+          <SelectStyled options={options} onChange={this.handleChangeOptionPlayer2}></SelectStyled>
         </PlayerTwoContent>
       </GameContainer>
     );
