@@ -39,8 +39,9 @@ const ScoreTitle = styled.div`
 `
 
 const Table = styled.table `
-  font-size: 20px;
-  width: 60%;
+  font-size: 15px;
+  margin-bottom: 30px;
+  overflow-x: auto;
   td, th {
     text-align: center;
     padding: 10px;
@@ -49,10 +50,27 @@ const Table = styled.table `
     color: white;
     font-size: 30px;
     letter-spacing: 1px;
+    // iPhone 6/7/8 Plus
+    @media (max-width: 414px) {
+      font-size: 16px;
+    }
+    // iPhone5/SE
+    @media (max-width: 320px) {
+      font-size: 12px;
+    }
   }
   tr:nth-child(odd){
     background-color: rgba(255, 255, 255, 0.5);
   }
+`
+
+const TableContainer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-x:auto;
+  width: 90%;
 `
 
 const PrincipalTitleStyled = styled(PrincipalTitle)`
@@ -86,51 +104,41 @@ class Statistics extends Component {
   render() {
     const { statistics } = this.state;
 
-    // TODO print the appripiate statistics
     return (
       <StatisticsContainer>
         <ScoreTitle>
           <PrincipalTitle blue>Score</PrincipalTitle>
           <Button onClick={this.goToGame}>Back</Button>
         </ScoreTitle>
-        <PrincipalTitleStyled blue>
-          <span role="img" aria-label="hand">👇🏼 </span>
-            Player 1
-          <span role="img" aria-label="hand"> 👇🏾</span>
-        </PrincipalTitleStyled>
-        <Table>
-          <tr>
-            <th>Round</th>
-            <th>Winner</th> 
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>asdad</td> 
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>dfgdgdf</td> 
-          </tr>
-        </Table>
-        <PrincipalTitleStyled blue>
-          <span role="img" aria-label="hand">👇🏼 </span>
-            Player 1
-          <span role="img" aria-label="hand"> 👇🏾</span>
-        </PrincipalTitleStyled>
-        <Table>
-          <tr>
-            <th>Round</th>
-            <th>Winner</th> 
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>asdad</td> 
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>dfgdgdf</td> 
-          </tr>
-        </Table>
+        {
+          statistics.map((info) => {
+            return (
+              <TableContainer key={info._id}>
+                <PrincipalTitleStyled blue>
+                  <span role="img" aria-label="hand">👇🏼 </span>
+                    {info.name}
+                  <span role="img" aria-label="hand"> 👇🏾</span>
+                </PrincipalTitleStyled>
+                <Table>
+                  <thead>
+                    <th>Rounds Wins</th>
+                    <th>Rounds Defeats</th> 
+                    <th>Games Wins</th>
+                    <th>Games Defeats</th> 
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{info.rounds.wins}</td>
+                      <td>{info.rounds.defeats}</td>
+                      <td>{info.games.wins}</td>
+                      <td>{info.games.defeats}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </TableContainer>
+            );
+          })
+        }
       </StatisticsContainer>
     );
   }
