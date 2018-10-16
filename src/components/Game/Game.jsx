@@ -202,7 +202,8 @@ class Game extends Component {
           contentLabel="Minimal Modal Example"
           style={{
             overlay: {
-              backgroundColor: 'transparent'
+              backgroundColor: 'transparent',
+              zIndex: '3'
             }
           }}
         >
