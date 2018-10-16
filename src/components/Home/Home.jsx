@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styled, { keyframes } from 'styled-components';
 import { connect } from 'react-redux';
 
 import { setPlayers } from '../../actions';
@@ -11,8 +10,6 @@ import {
   InputContainer,
   Label,
   Input,
-  Move,
-  Points,
   Ball,
   Animation
 } from '../Styled/Styled';
@@ -59,6 +56,7 @@ class Home extends Component {
 
   render() {
     const { player1, player2 } = this.state;
+
     return (
       <HomeContainer>
         <Animation>{ this.renderAnimation() }</Animation>
@@ -86,7 +84,7 @@ class Home extends Component {
                   onChange={this.handleChange}
                 />
               </div>
-              <Button type="submit">Start</Button>
+              <Button type="submit" disabled={player1==='' || player2===''}>Start</Button>
             </form>
           </InputContainer>
         </HomeText>

@@ -42,6 +42,10 @@ export const Button = styled.button`
     height: 30px;
     width: 85px;
   }
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
 `
 
 export const PrincipalTitle = styled.h1`
