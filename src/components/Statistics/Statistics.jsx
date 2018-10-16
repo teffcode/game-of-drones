@@ -1,81 +1,16 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { fetchStatistics } from '../../actions';
 
-import { PrincipalTitle, Button } from '../Home/Home';
-
-const StatisticsContainer = styled.div`
-  align-items: center;
-  background-image: linear-gradient(to bottom left, #EE3DA5, #12A5E7);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  justify-content: center;
-  position: relative;
-  width: 100vw;
-`
-
-const ScoreTitle = styled.div`
-  align-items: center;
-  background-color: white;
-  color: black;
-  display: flex;
-  height: 80px;
-  justify-content: space-evenly;
-  margin: auto;
-  position: absolute;
-  top: 0;
-  width: 100vw;
-  z-index: 2;
-  // iPad Pro
-  @media (max-width: 1024px) {
-    height: 50px;
-  }
-  // iPhone 6/7/8 Plus
-  @media (max-width: 414px) {
-    height: 40px;
-  }
-`
-
-const Table = styled.table `
-  font-size: 15px;
-  margin-bottom: 30px;
-  overflow-x: auto;
-  td, th {
-    text-align: center;
-    padding: 10px;
-  }
-  th {
-    color: white;
-    font-size: 30px;
-    letter-spacing: 1px;
-    // iPhone 6/7/8 Plus
-    @media (max-width: 414px) {
-      font-size: 16px;
-    }
-    // iPhone5/SE
-    @media (max-width: 320px) {
-      font-size: 12px;
-    }
-  }
-  tr:nth-child(odd){
-    background-color: rgba(255, 255, 255, 0.5);
-  }
-`
-
-const TableContainer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow-x:auto;
-  width: 90%;
-`
-
-const PrincipalTitleStyled = styled(PrincipalTitle)`
-  margin: 20px 0px;
-`
+import { 
+  PrincipalTitle, 
+  Button,
+  StatisticsContainer,
+  ScoreTitle,
+  Table,
+  TableContainer,
+  PrincipalTitleStyled
+} from '../Styled/Styled';
 
 class Statistics extends Component {
   constructor(props) {
