@@ -8,7 +8,6 @@ export default function(state = initialState, action) {
   switch(action.type) {
     case PLAY_GAME:
       const newWinner = { [action.payload]: state[action.payload] + 1 }
-      console.log('NEW WINNER IN REDUCER: ', newWinner);
       return {...state, ...newWinner };
     case RESET_GAME:
       return { ...initialState };

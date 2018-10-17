@@ -41,10 +41,12 @@ class Statistics extends Component {
                 </PrincipalTitleStyled>
                 <Table>
                   <thead>
-                    <th>Rounds Wins</th>
-                    <th>Rounds Defeats</th> 
-                    <th>Games Wins</th>
-                    <th>Games Defeats</th> 
+                    <tr>
+                      <th>Rounds Wins</th>
+                      <th>Rounds Defeats</th> 
+                      <th>Games Wins</th>
+                      <th>Games Defeats</th> 
+                    </tr>
                   </thead>
                   <tbody>
                     <tr>

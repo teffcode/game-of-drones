@@ -4,6 +4,7 @@ import {
   RESET_STATISTICS,
   PLAY_GAME,
   RESET_GAME,
+  CLEAN_STATISTICS,
 } from './types';
 import { statistics as statisticsServices } from '../services';
 
@@ -17,7 +18,6 @@ export function fetchStatistics() {
 }
 
 export function setPlayers(player1, player2) {
-
   return {
     type: SET_PLAYERS,
     payload: { player1, player2 },
@@ -33,7 +33,6 @@ export async function resetStatistics() {
 }
 
 export function playGame(winner) {
-  console.log('NEW WINNER IN ACTION: ', winner);
   return {
     type: PLAY_GAME,
     payload: winner,
