@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import { connect } from 'react-redux';
 
 import { statistics as statisticsServices } from '../../services';
+import Window from '../Window/Window';
 import { 
   PrincipalTitle, 
   Button, 
@@ -40,6 +41,7 @@ class Game extends Component {
       wins: 0,
       defeats: 0,
     },
+    openWindow: true
   }
 
   goToStatistics = () => {
@@ -48,6 +50,12 @@ class Game extends Component {
 
   goToHome = () => {
     this.props.history.push('/')
+  }
+
+  toggleWindow = () => {
+    this.setState({
+      openWindow: !this.state.openWindow
+    });
   }
 
   handleOpenModal = () => {
@@ -186,7 +194,7 @@ class Game extends Component {
   }
 
   render() {
-    const { titleModal } = this.state;
+    const { titleModal, openWindow } = this.state;
     const { players } = this.props;
   
     const options = [
@@ -223,22 +231,16 @@ class Game extends Component {
           <Button onClick={this.goToHome}>Back</Button>
         </RoundTitleTwo>
         <PlayerOneContent>
-          <StarsContent>
-            <i className="fas fa-star"></i>
-            <i className="fas fa-star"></i>
-            <i className="fas fa-star"></i>
-          </StarsContent>
           <PrincipalTitle>{players.player1}</PrincipalTitle>
-          <SelectStyled options={options} onChange={this.handleChangeOptionPlayer1}></SelectStyled>
+          <Window openWindow={openWindow} toggleWindow={this.toggleWindow}>
+            <SelectStyled options={options} onChange={this.handleChangeOptionPlayer1}></SelectStyled>
+          </Window>
         </PlayerOneContent>
         <PlayerTwoContent>
-          <StarsContent>
-            <i className="fas fa-star"></i>
-            <i className="fas fa-star"></i>
-            <i className="fas fa-star"></i>
-          </StarsContent>
           <PrincipalTitle>{players.player2}</PrincipalTitle>
-          <SelectStyled options={options} onChange={this.handleChangeOptionPlayer2}></SelectStyled>
+          <Window openWindow={openWindow} toggleWindow={this.toggleWindow}>
+            <SelectStyled options={options} onChange={this.handleChangeOptionPlayer2}></SelectStyled>
+          </Window>
         </PlayerTwoContent>
       </GameContainer>
     );

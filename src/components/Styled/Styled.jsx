@@ -192,7 +192,6 @@ export const PlayerOneContent = styled.div`
   align-items: center;
   background-image: linear-gradient(to bottom left, #4927f1, #FDCDD1);
   display: flex;
-  flex-direction: column;
   height: 100vh;
   justify-content: center;
   left: 0;
@@ -228,31 +227,15 @@ export const PlayerTwoContent = styled.div`
   }
 `
 
-export const StarsContent = styled.div `
-  display: flex;
-  margin-bottom: 35px;
-  i {
-    color: yellow;
-    font-size: 40px;
-    margin: 0px 5px;
-    // iPhone 6/7/8 Plus
-    @media (max-width: 414px) {
-      font-size: 25px;
-    }
-  }
-  // iPhone 6/7/8 Plus
-  @media (max-width: 414px) {
-    margin-bottom: 15px;
-    margin-top: -50px;
-  }
-`
-
 export const SelectStyled = styled(Select) `
   cursor: pointer;
   font-size: 20px;
-  margin-top: 40px;
+  left: 20px;
   outline: none;
   width: 160px;
+  position: absolute;
+  top: 10px;
+  z-index: 2;
   // iPhone 6/7/8 Plus
   @media (max-width: 414px) {
     font-size: 15px;
@@ -368,4 +351,88 @@ export const TableContainer = styled.div`
 
 export const PrincipalTitleStyled = styled(PrincipalTitle)`
   margin: 20px 0px;
+`
+
+// Window - Styled Components
+
+export const Open = keyframes`
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 50%;
+  }
+`
+
+export const Close = keyframes`
+  0% {
+    width: 50%;
+  }
+  100% {
+    width: 0px;
+  }
+`
+
+export const WindowLeft = styled.div`
+  animation-name: ${props => props.openWindow ? Open : Close};
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+
+  background-color: white;
+  border-radius: 20px 0px 0px 0px; 
+  display: inline-block;
+  height: 80%;
+  position: absolute;
+  z-index: 3;
+`
+
+export const WindowRight = styled.div`
+  animation-name: ${props => props.openWindow ? Open : Close};
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+
+  background-color: white;
+  border-radius: 0px 20px 0px 0px; 
+  display: inline-block;
+  height: 90%;
+  position: absolute;
+  right: 0;
+  transform: rotateX(20deg);
+  transform-origin: top;
+  z-index: 3;
+`
+
+export const WindowContainer = styled.div`
+  background-color: transparent;
+  border-radius: 20px;
+  bottom: 0;
+  height: 240px;
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  top: 20%;
+  width: 200px;
+  z-index: 2;
+  // iPad Pro
+  @media (max-width: 1024px) {
+    top: 3%;
+  }
+  // iPhone 6/7/8 Plus
+  @media (max-width: 414px) {
+    top: 3%;
+  }
+`
+
+export const ButtonContainer = styled.div`
+  align-items: center;
+  background-color: rgb(238, 61, 165);
+  border-radius: 0px 0px 20px 20px;
+  bottom: 0;
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  z-index: 4;
 `
