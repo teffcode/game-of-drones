@@ -9,8 +9,12 @@ const notifyGame = (player, state) => axios.patch(`https://game-of-drones-api.he
 const readStatistics = () => axios.get('https://game-of-drones-api.herokuapp.com/statistics')
   .then((res) => res.data);
 
+const resetStatistics = () => axios.patch('https://game-of-drones-api.herokuapp.com/statistics/reset')
+  .then((res) => res);
+
 export default {
   notifyRound,
   notifyGame,
   readStatistics,
+  resetStatistics,
 }

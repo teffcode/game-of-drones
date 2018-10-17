@@ -24,13 +24,13 @@ export const HomeText = styled.div`
 
 export const Button = styled.button`
   background-color: transparent;
-  border: 4px solid ${({pink}) => (pink ? '#EE3DA5' : '#4927F1')};
-  border-radius: 5px;
-  color: ${({pink}) => (pink ? '#EE3DA5' : '#4927F1')};
+  border: 2px solid ${({white}) => (white ? 'white' : '#4927F1')};
+  border-radius: 22px;
+  color: ${({white}) => (white ? 'white' : '#4927F1')};
   cursor: pointer;
   font-family: 'Fredoka One', cursive;
   font-size: 18px;
-  height: 40px;
+  height: 38px;
   letter-spacing: 1px;
   outline: none;
   text-align: center;
@@ -189,11 +189,8 @@ export const RoundTitleTwo = styled(RoundTitle)`
 `
 
 export const PlayerOneContent = styled.div`
-  align-items: center;
   background-image: linear-gradient(to bottom left, #4927f1, #FDCDD1);
-  display: flex;
   height: 100vh;
-  justify-content: center;
   left: 0;
   position: absolute;
   width: 50vw;
@@ -207,12 +204,8 @@ export const PlayerOneContent = styled.div`
 `
 
 export const PlayerTwoContent = styled.div`
-  align-items: center;
   background-image: linear-gradient(to bottom left, #35EDAA, #4927F1);
-  display: flex;
-  flex-direction: column;  
   height: 100vh;
-  justify-content: center;
   position: absolute;
   right: 0;
   width: 50vw;
@@ -378,10 +371,10 @@ export const WindowLeft = styled.div`
   animation-duration: 1s;
   animation-fill-mode: forwards;
 
-  background-color: white;
+  background-image: ${({purple}) => (purple ? 'linear-gradient(#4927F1, #FDCDD1)' : 'linear-gradient(#4927F1, #35EDAA)')};
   border-radius: 20px 0px 0px 0px; 
   display: inline-block;
-  height: 80%;
+  height: 85%;
   position: absolute;
   z-index: 3;
 `
@@ -391,7 +384,9 @@ export const WindowRight = styled.div`
   animation-duration: 1s;
   animation-fill-mode: forwards;
 
-  background-color: white;
+  background-image: linear-gradient(white, #4927F1);
+  background-image: ${({purple}) => (purple ? 'linear-gradient(#4927F1, #FDCDD1)' : 'linear-gradient(#4927F1, #35EDAA)')};
+
   border-radius: 0px 20px 0px 0px; 
   display: inline-block;
   height: 90%;
@@ -408,25 +403,25 @@ export const WindowContainer = styled.div`
   bottom: 0;
   height: 240px;
   left: 0;
-  margin: 0 auto;
+  margin: auto;
   position: absolute;
   right: 0;
-  top: 20%;
+  top: 0;
   width: 200px;
   z-index: 2;
-  // iPad Pro
-  @media (max-width: 1024px) {
-    top: 3%;
+  // Galaxy S5
+  @media (max-width: 360px) {
+    height: 220px;
   }
-  // iPhone 6/7/8 Plus
-  @media (max-width: 414px) {
-    top: 3%;
+  // iPhone5/SE
+  @media (max-width: 320px) {
+    height: 194px;
   }
 `
 
 export const ButtonContainer = styled.div`
   align-items: center;
-  background-color: rgb(238, 61, 165);
+  background-color: ${({purple}) => (purple ? '#FDCDD1' : '#35EDAA')};
   border-radius: 0px 0px 20px 20px;
   bottom: 0;
   display: flex;
@@ -435,4 +430,12 @@ export const ButtonContainer = styled.div`
   position: absolute;
   width: 100%;
   z-index: 4;
+  // Galaxy S5
+  @media (max-width: 360px) {
+    height: 40px;
+  }
+  // iPhone5/SE
+  @media (max-width: 320px) {
+    height: 37px;
+  }
 `

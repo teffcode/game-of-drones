@@ -13,23 +13,8 @@ import {
 } from '../Styled/Styled';
 
 class Statistics extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      statistics: []
-    }
-  }
-
   componentDidMount() {
-    this.props.fetchStatistics()
-      .then(response => {
-        this.setState((prevState) => {
-          return {
-            ...prevState,
-            statistics: [...response.payload.data],
-          }
-        });
-      });
+    this.props.fetchStatistics();
   }
 
   goToGame = () => {
@@ -37,7 +22,7 @@ class Statistics extends Component {
   }
 
   render() {
-    const { statistics } = this.state;
+    const { statistics } = this.props;
 
     return (
       <StatisticsContainer>
@@ -79,4 +64,10 @@ class Statistics extends Component {
   }
 }
 
-export default connect(null, { fetchStatistics })(Statistics);
+function mapStateToProps({ statistics }) {
+  return {
+    statistics,
+  }
+}
+
+export default connect(mapStateToProps, { fetchStatistics })(Statistics);

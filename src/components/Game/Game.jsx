@@ -3,6 +3,8 @@ import ReactModal from 'react-modal';
 import { connect } from 'react-redux';
 
 import { statistics as statisticsServices } from '../../services';
+import { gameUtils } from '../../utils';
+import { resetStatistics, playGame, resetGame } from '../../actions';
 import Window from '../Window/Window';
 import { 
   PrincipalTitle, 
@@ -12,7 +14,6 @@ import {
   RoundTitleTwo,
   PlayerOneContent,
   PlayerTwoContent,
-  StarsContent,
   SelectStyled,
   ReactModalStyled
 } from '../Styled/Styled';
@@ -20,28 +21,58 @@ import {
 ReactModal.setAppElement('#root');
 
 class Game extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      selectedOptionPlayer1: {
+        value: ''
+      },
+      selectedOptionPlayer2: {
+        value: undefined,
+      },
+      titleModal: 'Hi',
+      roundWinner: '',
+      roundDefeat: '',
+      gameWinner: '',
+      openWindowPlayer1: true,
+      openWindowPlayer2: true
+    }
+  }
 
-  state = {
-    showModal: false,
-    selectedOptionPlayer1: {
-      value: ''
-    },
-    selectedOptionPlayer2: {
-      value: undefined,
-    },
-    titleModal: 'Hi',
-    roundWinner: '',
-    roundDefeat: '',
-    gameWinner: '',
-    player1: {
-      wins: 0,
-      defeats: 0,
-    },
-    player2: {
-      wins: 0,
-      defeats: 0,
-    },
-    openWindow: true
+  componentDidUpdate() {
+    const { resetStatistics, resetGame, game, players } = this.props;
+    // Validate if game winner exists
+    if (game.player1 >= 3) {
+      statisticsServices.notifyGame('player1', 'wins');
+      statisticsServices.notifyGame('player2', 'defeats');
+      this.setState((prevState) => {
+        return {
+          ...prevState,
+          titleModal: `🏆 ${players.player1} wins 🏆`,
+          roundWinner: '',
+          roundDefeat: '',
+          gameWinner: '',
+        }
+      });
+      // Dispatch action to reset statistics
+      resetStatistics().then(() => console.log('Statistics reseted'));
+      resetGame();
+    } else if (game.player2 >= 3) {
+      statisticsServices.notifyGame('player2', 'wins');
+      statisticsServices.notifyGame('player1', 'defeats');
+      this.setState((prevState) => {
+        return {
+          ...prevState,
+          titleModal: `🏆 ${players.player2} wins 🏆`,
+          roundWinner: '',
+          roundDefeat: '',
+          gameWinner: '',
+        }
+      });
+      resetStatistics().then(() => console.log('Statistics reseted'));
+      resetGame();
+    }
   }
 
   goToStatistics = () => {
@@ -52,13 +83,20 @@ class Game extends Component {
     this.props.history.push('/')
   }
 
-  toggleWindow = () => {
+  toggleWindowPlayer1 = () => {
     this.setState({
-      openWindow: !this.state.openWindow
+      openWindowPlayer1: !this.state.openWindowPlayer1
+    });
+  }
+
+  toggleWindowPlayer2 = () => {
+    this.setState({
+      openWindowPlayer2: !this.state.openWindowPlayer2
     });
   }
 
   handleOpenModal = () => {
+    const { players, playGame } = this.props;
     const {
       selectedOptionPlayer1,
       selectedOptionPlayer2,
@@ -70,27 +108,20 @@ class Game extends Component {
         ...prevState,
         showModal: true,
     }});
-    let message = 'There is a tie 🙄';
+    let message = '';
     let winner = '';
+    const result = gameUtils.roundWinner(selectedOptionPlayer1.value, selectedOptionPlayer2.value);
 
-    if(selectedOptionPlayer1.value === 'rock' && selectedOptionPlayer2.value === 'paper') {
-      message = 'Player 2 wins this battle 🎉';
-      winner = 'player2';
-    } else if(selectedOptionPlayer1.value === 'rock' && selectedOptionPlayer2.value === 'scissor') {
-      message = 'Player 1 wins this battle 🎉';
+    if (result === 'win') {
       winner = 'player1';
-    } else if(selectedOptionPlayer1.value === 'paper' && selectedOptionPlayer2.value === 'rock') {
-      message = 'Player 1 wins this battle 🎉';
-      winner = 'player1';
-    } else if(selectedOptionPlayer1.value === 'paper' && selectedOptionPlayer2.value === 'scissor') {
-      message = 'Player 2 wins this battle 🎉';
+      message = `${players.player1} wins this battle 🎉`;
+      playGame('player1');
+    } else if (result === 'loose') {
       winner = 'player2';
-    } else if(selectedOptionPlayer1.value === 'scissor' && selectedOptionPlayer2.value === 'rock') {
-      message = 'Player 2 wins this battle 🎉';
-      winner = 'player2';
-    } else if(selectedOptionPlayer1.value === 'scissor' && selectedOptionPlayer2.value === 'paper') {
-      message = 'Player 1 wins this battle 🎉';
-      winner = 'player1';
+      message = `${players.player2} wins this battle 🎉`;
+      playGame('player2');
+    } else {
+      message = 'There is a tie 🙄';
     }
 
     this.setState((prevState) => {
@@ -100,14 +131,6 @@ class Game extends Component {
           titleModal: message,
           roundWinner: 'player1',
           roundDefeat: 'player2',
-          player1: {
-            ...prevState.player1,
-            wins: prevState.player1.wins + 1,
-          },
-          player2: {
-            ...prevState.player2,
-            defeats: prevState.player2.defeats + 1,
-          },
         }
       } else if (winner === 'player2') {
         return {
@@ -115,14 +138,6 @@ class Game extends Component {
           titleModal: message,
           roundWinner: 'player2',
           roundDefeat: 'player1',
-          player1: {
-            ...prevState.player1,
-            defeats: prevState.player1.defeats + 1,
-          },
-          player2: {
-            ...prevState.player2,
-            wins: prevState.player2.wins + 1,
-          },
         }
       }
       return {
@@ -132,52 +147,9 @@ class Game extends Component {
         roundDefeat: '',
       }
     });
-
-    // Notify to statistics
     if (roundWinner !== '') {
       statisticsServices.notifyRound(roundWinner, 'wins');
       statisticsServices.notifyRound(roundDefeat, 'defeats');
-    }
-    if (this.state.player1.wins >= 3) {
-      statisticsServices.notifyGame('player1', 'wins');
-      statisticsServices.notifyGame('player2', 'defeats');
-      this.setState((prevState) => {
-        return {
-          ...prevState,
-          titleModal: '🏆 Player 1 wins 🏆',
-          roundWinner: '',
-          roundDefeat: '',
-          gameWinner: '',
-          player1: {
-            wins: 0,
-            defeats: 0,
-          },
-          player2: {
-            wins: 0,
-            defeats: 0,
-          },
-        }
-      });
-    } else if (this.state.player2.wins >= 3) {
-      statisticsServices.notifyGame('player2', 'wins');
-      statisticsServices.notifyGame('player1', 'defeats');
-      this.setState((prevState) => {
-        return {
-          ...prevState,
-          titleModal: '🏆 Player 2 wins 🏆',
-          roundWinner: '',
-          roundDefeat: '',
-          gameWinner: '',
-          player1: {
-            wins: 0,
-            defeats: 0,
-          },
-          player2: {
-            wins: 0,
-            defeats: 0,
-          },
-        }
-      });
     }
   }
   
@@ -194,7 +166,11 @@ class Game extends Component {
   }
 
   render() {
-    const { titleModal, openWindow } = this.state;
+    const { 
+      titleModal, 
+      openWindowPlayer1,
+      openWindowPlayer2,
+    } = this.state;
     const { players } = this.props;
   
     const options = [
@@ -216,7 +192,7 @@ class Game extends Component {
           }}
         >
           <PrincipalTitle blue>{titleModal}</PrincipalTitle>
-          <Button pink onClick={this.handleCloseModal}>OK</Button>
+          <Button onClick={this.handleCloseModal}>OK</Button>
         </ReactModalStyled>
         <RoundTitle>
           <PrincipalTitle blue>Round</PrincipalTitle>
@@ -231,14 +207,21 @@ class Game extends Component {
           <Button onClick={this.goToHome}>Back</Button>
         </RoundTitleTwo>
         <PlayerOneContent>
-          <PrincipalTitle>{players.player1}</PrincipalTitle>
-          <Window openWindow={openWindow} toggleWindow={this.toggleWindow}>
+          <Window 
+            openWindow={openWindowPlayer1} 
+            toggleWindow={this.toggleWindowPlayer1}
+            playerName={players.player1}
+            purple
+          >
             <SelectStyled options={options} onChange={this.handleChangeOptionPlayer1}></SelectStyled>
           </Window>
         </PlayerOneContent>
         <PlayerTwoContent>
-          <PrincipalTitle>{players.player2}</PrincipalTitle>
-          <Window openWindow={openWindow} toggleWindow={this.toggleWindow}>
+          <Window 
+            openWindow={openWindowPlayer2} 
+            toggleWindow={this.toggleWindowPlayer2}
+            playerName={players.player2}
+          >
             <SelectStyled options={options} onChange={this.handleChangeOptionPlayer2}></SelectStyled>
           </Window>
         </PlayerTwoContent>
@@ -247,10 +230,15 @@ class Game extends Component {
   }
 }
 
-function mapStateToProps({ players }) {
+function mapStateToProps({ players, game }) {
   return {
     players,
+    game,
   }
 }
 
-export default connect(mapStateToProps)(Game);
+export default connect(mapStateToProps, {
+  resetStatistics,
+  playGame,
+  resetGame,
+})(Game);

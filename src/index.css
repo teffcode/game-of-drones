@@ -3,3 +3,22 @@ body {
   padding: 0;
   font-family: 'Fredoka One', cursive;
 }
+
+h2 {
+  color: white;
+  font-size: 35px;
+  left: 0;
+  letter-spacing: 1px;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 22%;
+}
+
+@media (max-width: 1024px) {
+  h2 {
+    font-size: 25px;
+    top: 2%;
+  }
+}
